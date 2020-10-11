@@ -32,5 +32,5 @@ public interface WordDAO {
 
     @Query("SELECT * FROM wordTable WHERE uuid=:inputId")
     Word getWord(UUID inputId);
-    
+
 }
