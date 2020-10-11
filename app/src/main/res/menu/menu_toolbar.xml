@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/word_number"
-        android:title="Number:      "
+        android:title="Number:  "
         app:showAsAction="always" />
     <item
         android:id="@+id/search_word"
@@ -13,8 +13,9 @@
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
     <item
-        android:id="add_word"
+        android:id="@+id/add_word"
         android:icon="@android:drawable/ic_menu_add"
+        android:iconTint="#FBFBFB"
         android:title="Add"
         app:showAsAction="always" />
 </menu>

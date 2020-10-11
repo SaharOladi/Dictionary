@@ -1,14 +1,21 @@
 package com.example.dictionary.controller.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.print.PageRange;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -25,6 +32,8 @@ import java.util.List;
 
 public class WordListFragment extends Fragment {
 
+    public static final String TAG_WORD_DETAIL_FRAGMENT = "TAG_WORD_DETAIL_FRAGMENT";
+    public static final int REQUEST_CODE_WORD_DETAIL_FRAGMENT = 0;
     private RecyclerView mRecyclerView;
     private WordAdapter mWordAdapter;
 
@@ -184,5 +193,48 @@ public class WordListFragment extends Fragment {
     public void onPause() {
         super.onPause();
         updateUI();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_toolbar, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.add_word:
+                WordDetailFragment wordDetailFragment = WordDetailFragment.newInstance();
+
+                wordDetailFragment.setTargetFragment(
+                        WordListFragment.this, REQUEST_CODE_WORD_DETAIL_FRAGMENT);
+
+                wordDetailFragment.show(getFragmentManager(), TAG_WORD_DETAIL_FRAGMENT);
+                return true;
+            case R.id.search_word:
+
+                //TODO
+                return true;
+            case R.id.word_number:
+                int numberOfWords = mRepository.getWords().size();
+                AppCompatActivity activity = (AppCompatActivity) getActivity();
+                activity.getSupportActionBar().setSubtitle("" + numberOfWords);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if (requestCode == REQUEST_CODE_WORD_DETAIL_FRAGMENT
+                && resultCode == Activity.RESULT_OK && data != null) {
+
+            Word word = (Word) data.getSerializableExtra(WordDetailFragment.EXTRA_WORD);
+            mRepository.insertWord(word);
+            updateUI();
+        }
     }
 }
