@@ -1,12 +1,13 @@
 package com.example.dictionary.controller.fragment;
 
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +18,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.dictionary.R;
@@ -25,6 +30,8 @@ import com.example.dictionary.model.Word;
 import com.example.dictionary.repository.IRepository;
 import com.example.dictionary.repository.WordDBRepository;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -143,9 +150,11 @@ public class WordListFragment extends Fragment {
 
     }
 
-    private class WordAdapter extends RecyclerView.Adapter<WordHolder> {
+    private class WordAdapter extends RecyclerView.Adapter<WordHolder> implements Filterable {
 
         private List<Word> mWords;
+        private List<Word> mSearchWords;
+
 
         public List<Word> getWords() {
             return mWords;
@@ -153,10 +162,13 @@ public class WordListFragment extends Fragment {
 
         public void setWords(List<Word> words) {
             mWords = words;
+            mSearchWords = new ArrayList<>(words);
+            notifyDataSetChanged();
         }
 
         public WordAdapter(List<Word> words) {
             mWords = words;
+            mSearchWords = new ArrayList<>(words);
         }
 
         @NonNull
@@ -179,6 +191,42 @@ public class WordListFragment extends Fragment {
         public int getItemCount() {
             return mWords.size();
         }
+
+        @Override
+        public Filter getFilter() {
+            return new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence charSequence) {
+                    List<Word> filteredList = new ArrayList<>();
+                    if (charSequence == null || charSequence.length() == 0) {
+                        filteredList.addAll(mSearchWords);
+                    } else {
+                        String filter = charSequence.toString().toLowerCase().trim();
+                        for (Word word:mSearchWords) {
+                            if (word.getTitle().toLowerCase().contains(filter) ||
+                                    word.getMean().toLowerCase().contains(filter)) {
+                                filteredList.add(word);
+                                System.out.println(word);
+                            }
+                        }
+                    }
+                    FilterResults results = new FilterResults();
+                    results.values = filteredList;
+                    return results;
+                }
+
+                @Override
+                protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                    if (mWords != null)
+                        mWords.clear();
+                    else
+                        mWords = new ArrayList<>();
+                    if (filterResults.values != null)
+                        mWords.addAll((Collection<? extends Word>) filterResults.values);
+                    notifyDataSetChanged();
+                }
+            };
+        }
     }
 
     @Override
@@ -195,7 +243,28 @@ public class WordListFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_toolbar, menu);
+
+        SearchManager searchManager =
+                (SearchManager)getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.search_word).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mWordAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
     }
 
     @Override
@@ -209,8 +278,6 @@ public class WordListFragment extends Fragment {
                         WordListFragment.this, REQUEST_CODE_WORD_DETAIL_FRAGMENT);
                 wordDetailFragment.show(getFragmentManager(), TAG_WORD_DETAIL_FRAGMENT);
                 count += 1;
-                return true;
-            case R.id.search_word:
                 return true;
             case R.id.word_number:
                 item.setTitle(count + " words");
