@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/word_number"
-        android:title="Number:  "
+        android:title="Words"
         app:showAsAction="always" />
     <item
         android:id="@+id/search_word"

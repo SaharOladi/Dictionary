@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.print.PageRange;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.dictionary.R;
-import com.example.dictionary.database.WordDataBase;
 import com.example.dictionary.model.Word;
 import com.example.dictionary.repository.IRepository;
 import com.example.dictionary.repository.WordDBRepository;
@@ -202,24 +200,20 @@ public class WordListFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
+        item.setVisible(true);
+        int count = mRepository.getWords().size();
         switch (item.getItemId()) {
             case R.id.add_word:
                 WordDetailFragment wordDetailFragment = WordDetailFragment.newInstance();
-
                 wordDetailFragment.setTargetFragment(
                         WordListFragment.this, REQUEST_CODE_WORD_DETAIL_FRAGMENT);
-
                 wordDetailFragment.show(getFragmentManager(), TAG_WORD_DETAIL_FRAGMENT);
+                count += 1;
                 return true;
             case R.id.search_word:
-
-                //TODO
                 return true;
             case R.id.word_number:
-                int numberOfWords = mRepository.getWords().size();
-                AppCompatActivity activity = (AppCompatActivity) getActivity();
-                activity.getSupportActionBar().setSubtitle("" + numberOfWords);
+                item.setTitle(count + " words");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
