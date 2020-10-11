@@ -1,4 +1,4 @@
-package com.example.dictionary.controller;
+package com.example.dictionary.controller.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
