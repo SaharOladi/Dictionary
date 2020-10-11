@@ -24,6 +24,10 @@ public class Word {
     private String mMean;
 
 
+    public Word() {
+        this(UUID.randomUUID());
+    }
+
     public Word(UUID id) {
         mId = id;
     }

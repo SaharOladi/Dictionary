@@ -46,6 +46,7 @@ public class WordListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setHasOptionsMenu(true);
         mRepository = WordDBRepository.getInstance(getActivity());
 
     }
