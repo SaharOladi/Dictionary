@@ -1,8 +1,10 @@
 package com.example.dictionary.controller.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -43,6 +45,7 @@ public class WordListFragment extends Fragment {
     private WordAdapter mWordAdapter;
 
     private IRepository mRepository;
+    private Word mWord = new Word();
 
     public WordListFragment() {
         // Required empty public constructor
@@ -117,7 +120,19 @@ public class WordListFragment extends Fragment {
             mDeleteWord.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                            .setTitle("Do You Want to Delete Word?!")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mRepository.deleteWord(mWord);
+                                    updateUI();
+                                }
+                            })
+                            .setNegativeButton("No", null);
 
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
             });
             mEditWord.setOnClickListener(new View.OnClickListener() {
@@ -202,7 +217,7 @@ public class WordListFragment extends Fragment {
                         filteredList.addAll(mSearchWords);
                     } else {
                         String filter = charSequence.toString().toLowerCase().trim();
-                        for (Word word:mSearchWords) {
+                        for (Word word : mSearchWords) {
                             if (word.getTitle().toLowerCase().contains(filter) ||
                                     word.getMean().toLowerCase().contains(filter)) {
                                 filteredList.add(word);
@@ -247,7 +262,7 @@ public class WordListFragment extends Fragment {
         inflater.inflate(R.menu.menu_toolbar, menu);
 
         SearchManager searchManager =
-                (SearchManager)getActivity().getSystemService(Context.SEARCH_SERVICE);
+                (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
                 (SearchView) menu.findItem(R.id.search_word).getActionView();
         searchView.setSearchableInfo(
