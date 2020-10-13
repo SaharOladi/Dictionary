@@ -11,7 +11,7 @@
         android:id="@+id/search_word"
         android:icon="@android:drawable/ic_menu_search"
         android:title="Search"
-        app:actionViewClass="android.widget.SearchView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always" />
     <item
         android:id="@+id/add_word"
