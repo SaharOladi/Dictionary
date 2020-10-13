@@ -10,6 +10,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ShareCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +33,7 @@ import com.example.dictionary.model.Word;
 import com.example.dictionary.repository.IRepository;
 import com.example.dictionary.repository.WordDBRepository;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -144,9 +146,43 @@ public class WordListFragment extends Fragment {
             mShareWord.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                            .setTitle("Do You Want to Share Word?!")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    shareReportIntent();
+                                }
+                            })
+                            .setNegativeButton("No", null);
 
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
             });
+        }
+
+        private String getReport() {
+            String title = mWord.getTitle();
+            String mean = mWord.getMean();
+
+            String report = getString(
+                    R.string.word_report,
+                    title,
+                    mean);
+
+            return report;
+        }
+
+        private void shareReportIntent() {
+            Intent intentBuilder = ShareCompat.IntentBuilder.from(getActivity())
+                    .setType("text/plain")
+                    .setText(getReport())
+                    .createChooserIntent();
+
+            if (intentBuilder.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivity(intentBuilder);
+            }
         }
 
         private void findHolderViews(@NonNull View itemView) {
