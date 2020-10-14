@@ -64,7 +64,7 @@ public class WordDetailFragment extends DialogFragment {
         setListeners();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.save), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         sendResult(mWord);

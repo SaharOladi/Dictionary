@@ -1,7 +1,27 @@
 <resources>
     <string name="app_name">Dictionary</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <string name="word_report">The word is %1$s and the mean is %2$s</string>
+    <string name="enter_the_word">Enter The Word:</string>
+    <string name="word">Word</string>
+    <string name="enter_the_meaning">Enter The Meaning:</string>
+    <string name="word_meaning">Word Meaning</string>
+
+    <string name="setting">Setting</string>
+    <string name="add">Add</string>
+    <string name="search">search</string>
+    <string name="delete">delete</string>
+
+    <string name="save">Save</string>
+    <string name="share">Do You Want to Share Word?!</string>
+    <string name="remove">Do You Want to Delete Word?!</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+
+
+
+
+
+
 </resources>

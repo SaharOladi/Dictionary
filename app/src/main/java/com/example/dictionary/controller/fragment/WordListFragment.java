@@ -1,9 +1,13 @@
 package com.example.dictionary.controller.fragment;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -33,6 +37,7 @@ import com.example.dictionary.repository.WordDBRepository;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 
 public class WordListFragment extends Fragment {
@@ -60,6 +65,8 @@ public class WordListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loadLocation();
+
 
         setHasOptionsMenu(true);
         mRepository = WordDBRepository.getInstance(getActivity());
@@ -119,15 +126,15 @@ public class WordListFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                            .setTitle("Do You Want to Delete Word?!")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            .setTitle(getResources().getString(R.string.remove))
+                            .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     mRepository.deleteWord(mWord);
                                     updateUI();
                                 }
                             })
-                            .setNegativeButton("No", null);
+                            .setNegativeButton(getResources().getString(R.string.no), null);
 
                     AlertDialog dialog = builder.create();
                     dialog.show();
@@ -143,14 +150,14 @@ public class WordListFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                            .setTitle("Do You Want to Share Word?!")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            .setTitle(getResources().getString(R.string.share))
+                            .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     shareReportIntent();
                                 }
                             })
-                            .setNegativeButton("No", null);
+                            .setNegativeButton(getResources().getString(R.string.no), null);
 
                     AlertDialog dialog = builder.create();
                     dialog.show();
@@ -276,18 +283,22 @@ public class WordListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateUI();
+
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
         updateUI();
+
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_toolbar, menu);
+        loadLocation();
 
         MenuItem searchItem = menu.findItem(R.id.search_word);
         SearchView searchView = (SearchView) searchItem.getActionView();
@@ -320,10 +331,15 @@ public class WordListFragment extends Fragment {
             case R.id.word_number:
                 item.setTitle(mRepository.getWords().size() + " words");
                 return true;
+
+            case R.id.setting:
+                showChangeLangDialog();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -336,4 +352,50 @@ public class WordListFragment extends Fragment {
             updateUI();
         }
     }
+
+    private void showChangeLangDialog() {
+
+        final String[] listLang = {"English", "Farsi"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setTitle("Choose Language...");
+        builder.setSingleChoiceItems(listLang, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                if (i == 0)
+                    setLocation("en");
+                else
+                    setLocation("fa");
+
+
+                dialogInterface.dismiss();
+            }
+
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+    private void setLocation(String string) {
+
+        Locale locale = new Locale(string);
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getActivity().getResources().updateConfiguration(config, getActivity().getResources().getDisplayMetrics());
+
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences("Setting", Context.MODE_PRIVATE).edit();
+        editor.putString("My_Language", string);
+        editor.apply();
+    }
+
+    private void loadLocation() {
+        SharedPreferences prefs = getActivity().getSharedPreferences("Setting", Context.MODE_PRIVATE);
+        String lang = prefs.getString("My_Language", "");
+        setLocation(lang);
+    }
+
 }

@@ -15,22 +15,23 @@
             android:id="@+id/text_hint_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="10dp"
-            android:text="Enter The Word: "
+            android:padding="5dp"
+            android:text="@string/enter_the_word"
             android:textSize="12sp"
             android:textStyle="bold"></TextView>
 
         <EditText
             android:id="@+id/edit_text_title"
+            android:supportsRtl="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_hint_title"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:hint="Word"
+            android:hint="@string/word"
             android:inputType="text"
             android:maxLength="12"
             android:padding="12dp"
@@ -42,30 +43,31 @@
             android:id="@+id/text_hint_mean"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/edit_text_title"
             android:layout_marginStart="10dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="10dp"
             android:padding="5dp"
-            android:text="Enter The Meaning: "
+            android:text="@string/enter_the_meaning"
             android:textSize="12sp"
-            android:textStyle="bold"
-            android:layout_below="@id/edit_text_title"></TextView>
+            android:textStyle="bold"></TextView>
 
         <EditText
             android:id="@+id/edit_text_mean"
+            android:supportsRtl="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/text_hint_mean"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:hint="Word Meaning"
+            android:hint="@string/word_meaning"
             android:inputType="textCapSentences|textNoSuggestions|textMultiLine"
             android:lines="3"
             android:maxLines="3"
             android:minLines="1"
             android:padding="12dp"
             android:scrollbars="vertical"
-            android:textSize="14sp"
-            android:layout_below="@id/text_hint_mean"/>
+            android:textSize="14sp" />
 
     </RelativeLayout>
 

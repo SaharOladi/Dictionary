@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">دیکشنری</string>
+    <string name="word_report">The word is %1$s and the mean is %2$s</string>
+    <string name="enter_the_word">لغت را وارد کنید: </string>
+    <string name="word">لغت </string>
+    <string name="enter_the_meaning">معنای لغت را وارد کنید: </string>
+    <string name="word_meaning">معنای لغت </string>
+
+    <string name="setting">تغییرات</string>
+    <string name="add">اضافه کردن</string>
+    <string name="search">جست و جو کردن</string>
+    <string name="delete">حذف کردن</string>
+
+    <string name="save">دخیره شود</string>
+    <string name="share">آیا میخواهید لغت را به اشتراک بگذارید؟! </string>
+    <string name="remove">آیا میخواهید لغت را پاک کنید؟! </string>
+
+    <string name="yes">بله</string>
+    <string name="no">خیر</string>
+
+</resources>
