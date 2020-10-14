@@ -24,6 +24,16 @@ public class Word implements Serializable {
     @ColumnInfo(name = "word mean")
     private String mMean;
 
+    @ColumnInfo(name = "word sentence")
+    private String mSentence;
+
+    public String getSentence() {
+        return mSentence;
+    }
+
+    public void setSentence(String sentence) {
+        mSentence = sentence;
+    }
 
     public Word() {
         this(UUID.randomUUID());
@@ -42,6 +52,19 @@ public class Word implements Serializable {
     public Word(String title, String mean) {
         mTitle = title;
         mMean = mean;
+    }
+
+    public Word(UUID id, String title, String mean, String sentence) {
+        mId = id;
+        mTitle = title;
+        mMean = mean;
+        mSentence = sentence;
+    }
+
+    public Word(String title, String mean, String sentence) {
+        mTitle = title;
+        mMean = mean;
+        mSentence = sentence;
     }
 
     public long getPrimaryId() {

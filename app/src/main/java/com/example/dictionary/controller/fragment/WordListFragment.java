@@ -1,6 +1,5 @@
 package com.example.dictionary.controller.fragment;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -43,7 +42,13 @@ import java.util.Locale;
 public class WordListFragment extends Fragment {
 
     public static final String TAG_WORD_DETAIL_FRAGMENT = "TAG_WORD_DETAIL_FRAGMENT";
+    public static final String TAG_WORD_EDIT_FRAGMENT = "TAG_WORD_EDIT_FRAGMENT";
+
     public static final int REQUEST_CODE_WORD_DETAIL_FRAGMENT = 0;
+    public static final int REQUEST_CODE_WORD_EDIT_FRAGMENT = 1;
+    public static final String TAG_EDIT_FRAGMENT_CLICKER = "TAG_EDIT_FRAGMENT_CLICKER";
+    public static final int REQUEST_CODE_EDIT_CLICKER = 3;
+
     private RecyclerView mRecyclerView;
     private WordAdapter mWordAdapter;
 
@@ -115,12 +120,26 @@ public class WordListFragment extends Fragment {
 
             findHolderViews(itemView);
 
-            //TODO
             setListeners();
 
         }
 
         private void setListeners() {
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    WordEditFragment wordEditFragment = WordEditFragment.newInstance(mWord);
+
+                    wordEditFragment.setTargetFragment(
+                            WordListFragment.this, REQUEST_CODE_EDIT_CLICKER);
+
+                    wordEditFragment.show(getFragmentManager(), TAG_EDIT_FRAGMENT_CLICKER);
+
+
+                }
+            });
             mDeleteWord.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -143,6 +162,10 @@ public class WordListFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
 
+                    WordEditFragment wordEditFragment = WordEditFragment.newInstance(mWord);
+                    wordEditFragment.setTargetFragment(
+                            WordListFragment.this, REQUEST_CODE_WORD_EDIT_FRAGMENT);
+                    wordEditFragment.show(getFragmentManager(), TAG_WORD_EDIT_FRAGMENT);
                 }
             });
             mShareWord.setOnClickListener(new View.OnClickListener() {
@@ -350,6 +373,14 @@ public class WordListFragment extends Fragment {
 
             Word word = (Word) data.getSerializableExtra(WordDetailFragment.EXTRA_WORD);
             mRepository.insertWord(word);
+            updateUI();
+        }
+
+        if (requestCode == REQUEST_CODE_WORD_EDIT_FRAGMENT
+                && resultCode == WordEditFragment.RESULT_CODE_EDIT_WORD && data != null) {
+
+            Word word = (Word) data.getSerializableExtra(WordEditFragment.EXTRA_EDIT_WORD);
+            mRepository.updateWord(word);
             updateUI();
         }
     }
