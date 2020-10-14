@@ -9,20 +9,21 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/search_word"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/ic_search_icon_img"
         android:title="@string/search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always" />
     <item
         android:id="@+id/add_word"
-        android:icon="@android:drawable/ic_menu_add"
+        android:icon="@drawable/ic_add_icon_img"
         android:iconTint="#FBFBFB"
         android:title="@string/add"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/setting"
-        android:icon="@drawable/ic_edit_word"
+        android:icon="@drawable/ic_setting_icon_img"
         android:title="@string/setting"
-        app:showAsAction="never"/>
+        android:visible="true"
+        app:showAsAction="never" />
 </menu>

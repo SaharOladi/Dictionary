@@ -67,7 +67,6 @@ public class WordListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         loadLocation();
 
-
         setHasOptionsMenu(true);
         mRepository = WordDBRepository.getInstance(getActivity());
 
@@ -216,7 +215,8 @@ public class WordListFragment extends Fragment {
 
         public void setWords(List<Word> words) {
             this.mWords = words;
-            this.mSearchWords = new ArrayList<>(words);
+            if (words != null)
+                this.mSearchWords = new ArrayList<>(words);
             notifyDataSetChanged();
         }
 
@@ -271,8 +271,10 @@ public class WordListFragment extends Fragment {
 
                 @Override
                 protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                    mWords.clear();
-                    mWords.addAll((Collection<? extends Word>) filterResults.values);
+                    if (mWords != null)
+                        mWords.clear();
+                    if (filterResults.values != null)
+                        mWords.addAll((Collection<? extends Word>) filterResults.values);
                     notifyDataSetChanged();
                 }
             };
@@ -298,7 +300,6 @@ public class WordListFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_toolbar, menu);
-        loadLocation();
 
         MenuItem searchItem = menu.findItem(R.id.search_word);
         SearchView searchView = (SearchView) searchItem.getActionView();
