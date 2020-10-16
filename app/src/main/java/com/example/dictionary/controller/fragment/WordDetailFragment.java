@@ -130,4 +130,15 @@ public class WordDetailFragment extends DialogFragment {
         intent.putExtra(EXTRA_WORD, word);
         fragment.onActivityResult(requestCode, resultCode, intent);
     }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 }
